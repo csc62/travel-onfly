@@ -30,8 +30,6 @@ API REST desenvolvida com Laravel + Docker.
    * Notificação enviada ao usuário solicitante (implementação via JSON de resposta ou futura integração)
 
 
-## 
-
 ## 🚀 Setup rápido com Docker
 
 
