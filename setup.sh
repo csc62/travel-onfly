@@ -5,8 +5,11 @@
 
 set -e
 
+echo "Limpando containers antigos..."
+docker compose down -v || true
+
 echo "### 1. Subindo containers Docker..."
-docker-compose up -d --build
+docker compose up -d --build
 
 echo "### 2. Instalando dependências PHP..."
 docker exec -it travel_app composer install
