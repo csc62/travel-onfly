@@ -9,6 +9,7 @@ use App\Models\TravelOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+Use App\Notifications\TravelOrderStatusChanged;
 
 class TravelOrderController extends Controller
 {
@@ -73,17 +74,19 @@ class TravelOrderController extends Controller
         $order = TravelOrder::with('user')->findOrFail($id);
 
         if (!Auth::user()->is_admin) {
-            return response()->json(['message' => 'Forbidden'], 403);
+            return response()->json(['message' => 'Você não tem permissões de ADMIN'], 403);
         }
 
         $requestStatus = request('status');
 
         if ($order->status === 'aprovado' && $requestStatus === 'cancelado') {
-            return response()->json(['message' => 'Cannot cancel an approved order'], 400);
+            return response()->json(['message' => 'Não é possível cancelar um pedido APROVADO!'], 400);
         }
 
         $order->status = $requestStatus;
         $order->save();
+        
+        $order->user->notify(new TravelOrderStatusChanged($order));
 
         return response()->json(new TravelOrderResource($order));
     }

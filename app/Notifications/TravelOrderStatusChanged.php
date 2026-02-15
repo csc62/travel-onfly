@@ -20,14 +20,14 @@ class TravelOrderStatusChanged extends Notification
 
     public function via($notifiable)
     {
-        return ['mail', 'database', 'log'];
+        return ['mail', 'database'];
     }
 
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                ->line("O status do seu pedido de viagem para {$this->order->destination} mudou para: {$this->order->status}.")
-                ->action('Ver Pedido', url("/api/travel-orders/{$this->order->id}"));
+                ->line("O status do seu pedido de viagem para {$this->travelOrder->destination} mudou para: {$this->travelOrder->status}.")
+                ->action('Ver Pedido', url("/api/travel-orders/{$this->travelOrder->id}"));
     }
 
     public function toArray($notifiable)

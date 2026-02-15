@@ -132,6 +132,12 @@ Body JSON:
 {
     "status": "aprovado"
 }
+
+ou
+
+{
+    "status": "cancelado"
+}
 ```
 
 
