@@ -84,7 +84,7 @@ Clone o repositório:
 
 ```bash
 git clone https://github.com/csc62/travel-onfly
-cd travel-orders
+cd travel-onfly
 ```
 
 ## 🔑 Tokens de teste
