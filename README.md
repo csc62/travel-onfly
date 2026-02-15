@@ -17,6 +17,9 @@ API REST desenvolvida com Laravel + Docker.
 
 
 
+
+
+
 1. **Criar pedido de viagem**
    * Campos: `id`, `nome do solicitante`, `destino`, `data de ida`, `data de volta`, `status` (`solicitado`, `aprovado`, `cancelado`)
 2. **Consultar pedido por ID**
@@ -34,9 +37,18 @@ API REST desenvolvida com Laravel + Docker.
 
 
 
-1. Garanta que **Docker** e **Docker Compose** estão instalados.
-2. Garanta que o arquivo `setup.sh` esta na raiz do projeto.
-3. Dê permissão de execução:
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/csc62/travel-onfly
+cd travel-orders
+```
+
+2\. Garanta que **Docker** e **Docker Compose** estão instalados.
+
+3\.Garanta que o arquivo `setup.sh` esta na raiz do projeto.
+3\. Dê permissão de execução:
 
 ```javascript
 chmod +x setup.sh
