@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Models\TravelOrder; // <--- Import necessário
+use App\Models\TravelOrder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Laravel\Sanctum\Sanctum;
@@ -28,7 +28,7 @@ class TravelOrderTest extends TestCase
         $response->assertStatus(201);
         $this->assertDatabaseHas('travel_orders', [
             'user_id' => $user->id,
-            'destination' => 'Paris', // corrigido de "São Paulo" para "Paris"
+            'destination' => 'Paris',
         ]);
     }
 
@@ -42,7 +42,7 @@ class TravelOrderTest extends TestCase
         $response = $this->getJson('/api/travel-orders');
 
         $response->assertStatus(200);
-        $response->assertJsonCount(3);
+        $response->assertJsonCount(3, 'data');
     }
 
     public function test_user_can_view_order_by_id()
