@@ -5,9 +5,6 @@
 
 set -e
 
-echo "### 0. Configurando diretório seguro do Git..."
-docker exec -it travel_app git config --global --add safe.directory /var/www
-
 echo "Limpando containers antigos..."
 docker compose down -v || true
 
