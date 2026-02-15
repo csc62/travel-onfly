@@ -11,22 +11,26 @@ docker compose down -v || true
 echo "### 1. Subindo containers Docker..."
 docker compose up -d --build
 
-echo "### 2. Instalando dependências PHP..."
+echo "### 2. Ajustando permissões..."
+docker exec travel_app chown -R www-data:www-data storage bootstrap/cache
+docker exec travel_app chmod -R 775 storage bootstrap/cache
+
+echo "### 3. Instalando dependências PHP..."
 docker exec -it travel_app composer install
 
-echo "### 3. Copiando .env.example para .env..."
+echo "### 4. Copiando .env.example para .env..."
 docker exec -it travel_app cp .env.example .env
 
-echo "### 4. Gerando chave da aplicação..."
+echo "### 5. Gerando chave da aplicação..."
 docker exec -it travel_app php artisan key:generate
 
-echo "### 5. Rodando migrations..."
+echo "### 6. Rodando migrations..."
 docker exec -it travel_app php artisan migrate
 
-echo "### 6. Limpando cache..."
+echo "### 7. Limpando cache..."
 docker exec -it travel_app php artisan optimize:clear
 
-echo "### 7. Criando usuários de teste (normal e admin) e exibindo tokens..."
+echo "### 8. Criando usuários de teste (normal e admin) e exibindo tokens..."
 docker exec -it travel_app php artisan tinker --execute "\
 \$user = \App\Models\User::factory()->create([
     'email' => 'user@test.com',
@@ -40,7 +44,7 @@ docker exec -it travel_app php artisan tinker --execute "\
 echo 'User Token: ' . \$user->createToken('API Token')->plainTextToken . '\n'; \
 echo 'Admin Token: ' . \$admin->createToken('API Token')->plainTextToken . '\n';"
 
-echo "### 8. Criando pedidos de teste para o usuário normal..."
+echo "### 9. Criando pedidos de teste para o usuário normal..."
 docker exec -it travel_app php artisan tinker --execute "\
 \App\Models\TravelOrder::factory()->count(5)->create(['user_id' => 1]); \
 echo '5 pedidos de viagem criados para o usuário 1\n';"
