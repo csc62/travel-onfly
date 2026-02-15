@@ -14,8 +14,9 @@ class TravelOrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = TravelOrder::with('user'); // 👈 CARREGA O USER
+        $query = TravelOrder::with('user'); // carrega o user
 
+        // filtros opcionais
         if ($request->has('status')) {
             $query->where('status', $request->status);
         }
@@ -28,12 +29,16 @@ class TravelOrderController extends Controller
             $query->whereBetween('departure_date', [$request->from, $request->to]);
         }
 
-        $orders = $query
-            ->where('user_id', Auth::id())
-            ->get();
+        // Se não for admin, filtra pelo usuário logado
+        if (!Auth::user()->is_admin) {
+            $query->where('user_id', Auth::id());
+        }
+
+        $orders = $query->get();
 
         return TravelOrderResource::collection($orders);
     }
+
 
     public function store(StoreTravelOrderRequest $request): JsonResponse
     {
@@ -53,11 +58,13 @@ class TravelOrderController extends Controller
 
     public function show($id): JsonResponse
     {
-        $order = TravelOrder::with('user') // 👈 CARREGA AQUI TAMBÉM
-            ->where('id', $id)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
+        $query = TravelOrder::with('user')->where('id', $id);
 
+        if (!Auth::user()->is_admin) {
+            $query->where('user_id', Auth::id());
+        }
+
+        $order = $query->firstOrFail();
         return response()->json(new TravelOrderResource($order));
     }
 
