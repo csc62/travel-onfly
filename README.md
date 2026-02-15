@@ -19,7 +19,6 @@ API REST desenvolvida com Laravel + Docker.
 
 
 
-
 1. **Criar pedido de viagem**
    * Campos: `id`, `nome do solicitante`, `destino`, `data de ida`, `data de volta`, `status` (`solicitado`, `aprovado`, `cancelado`)
 2. **Consultar pedido por ID**

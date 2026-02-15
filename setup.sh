@@ -11,6 +11,13 @@ docker compose down -v || true
 echo "### 1. Subindo containers Docker..."
 docker compose up -d --build
 
+echo "### Aguardando MySQL ficar disponível..."
+until docker exec travel_mysql mysqladmin ping -h"localhost" --silent; do
+  sleep 2
+done
+
+echo "MySQL está pronto!"
+
 echo "### 2. Ajustando permissões..."
 docker exec travel_app chown -R www-data:www-data storage bootstrap/cache
 docker exec travel_app chmod -R 775 storage bootstrap/cache
