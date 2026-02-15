@@ -86,6 +86,7 @@ class TravelOrderController extends Controller
         $order->status = $requestStatus;
         $order->save();
         
+        //Envia notificação por email e salva no banco
         $order->user->notify(new TravelOrderStatusChanged($order));
 
         return response()->json(new TravelOrderResource($order));
