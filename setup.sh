@@ -48,8 +48,8 @@ docker exec -it travel_app php artisan tinker --execute "\
     'password' => bcrypt('12345678'),
     'is_admin' => true
 ]); \
-echo 'User Token: ' . \$user->createToken('API Token')->plainTextToken . "\n"; \
-echo 'Admin Token: ' . \$admin->createToken('API Token')->plainTextToken . "\n";"
+echo 'User Token: ' . \$user->createToken('API Token')->plainTextToken . \"\n\"; \
+echo 'Admin Token: ' . \$admin->createToken('API Token')->plainTextToken . \"\n\";"
 
 echo "### 9. Criando pedidos de teste para o usuário normal..."
 docker exec -it travel_app php artisan tinker --execute "\
