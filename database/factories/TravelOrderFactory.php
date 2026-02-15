@@ -11,11 +11,13 @@ class TravelOrderFactory extends Factory
 
     public function definition()
     {
+        $departure = $this->faker->dateTimeBetween('now', '+1 month');
+
         return [
-            'user_id' => null, // será setado no teste
+            'user_id' => null,
             'destination' => $this->faker->city(),
-            'departure_date' => $this->faker->date(),
-            'return_date' => $this->faker->date('+1 week'),
+            'departure_date' => $departure->format('Y-m-d'),
+            'return_date' => $departure->modify('+' . rand(3, 10) . ' days')->format('Y-m-d'),
             'status' => 'solicitado',
         ];
     }
