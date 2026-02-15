@@ -35,7 +35,7 @@ API REST desenvolvida com Laravel + Docker.
 
 
 1. Garanta que **Docker** e **Docker Compose** estão instalados.
-2. Copie o arquivo `setup.sh` para a raiz do projeto.
+2. Garanta que o arquivo `setup.sh` esta na raiz do projeto.
 3. Dê permissão de execução:
 
 ```javascript
