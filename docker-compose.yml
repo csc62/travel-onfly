@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: travel_app
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    user: "${UID}:${GID}"
+    depends_on:
+      - travel_mysql
+    networks:
+      - travel-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: travel_nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - travel-network
+
+  travel_mysql:
+    image: mysql:8
+    container_name: travel_mysql
+    environment:
+      MYSQL_DATABASE: travel_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    networks:
+      - travel-network
+
+networks:
+  travel-network:
+    driver: bridge
