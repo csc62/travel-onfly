@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/ping', function () {
     return response()->json([
-        'message' => 'API funcionando 🚀'
+        'message' => 'API funcionando!!!'
     ]);
 });
 
