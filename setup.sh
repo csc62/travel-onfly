@@ -58,4 +58,4 @@ echo '5 pedidos de viagem criados para o usuário 1\n';"
 
 echo "### ✅ Setup concluído!"
 echo "API pronta para uso: http://localhost:8000/api/ping"
-echo "Use os tokens gerados acima para testar endpoints via Postman."
+echo "Use os tokens gerados acima para testar endpoints via Postman ou Curl."

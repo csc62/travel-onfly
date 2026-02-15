@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTravelOrderRequest;
-use App\Http\Requests\UpdateTravelOrderStatusRequest;
 use App\Http\Resources\TravelOrderResource;
 use App\Models\TravelOrder;
 use Illuminate\Http\JsonResponse;
@@ -15,27 +14,25 @@ class TravelOrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = TravelOrder::query();
+        $query = TravelOrder::with('user'); // 👈 CARREGA O USER
 
-        // Filtra por status
         if ($request->has('status')) {
             $query->where('status', $request->status);
         }
 
-        // Filtra por destino
         if ($request->has('destination')) {
             $query->where('destination', 'like', "%{$request->destination}%");
         }
 
-        // Filtra por intervalo de datas
         if ($request->has('from') && $request->has('to')) {
             $query->whereBetween('departure_date', [$request->from, $request->to]);
         }
 
-        // Só retorna pedidos do usuário autenticado
-        $orders = $query->where('user_id', Auth::id())->get();
+        $orders = $query
+            ->where('user_id', Auth::id())
+            ->get();
 
-        return response()->json($orders);
+        return TravelOrderResource::collection($orders);
     }
 
     public function store(StoreTravelOrderRequest $request): JsonResponse
@@ -48,31 +45,32 @@ class TravelOrderController extends Controller
             'status' => 'solicitado'
         ]);
 
+        // 👇 RECARREGA COM USER
+        $order->load('user');
+
         return response()->json(new TravelOrderResource($order), 201);
     }
 
     public function show($id): JsonResponse
     {
-        $order = TravelOrder::where('id', $id)
-            ->where('user_id', Auth::id()) // usuário só vê seus pedidos
+        $order = TravelOrder::with('user') // 👈 CARREGA AQUI TAMBÉM
+            ->where('id', $id)
+            ->where('user_id', Auth::id())
             ->firstOrFail();
 
-        return response()->json($order);
+        return response()->json(new TravelOrderResource($order));
     }
-
 
     public function updateStatus($id): JsonResponse
     {
-        $order = TravelOrder::findOrFail($id);
+        $order = TravelOrder::with('user')->findOrFail($id);
 
-        // Apenas admin pode atualizar status
         if (!Auth::user()->is_admin) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $requestStatus = request('status'); // "aprovado" ou "cancelado"
+        $requestStatus = request('status');
 
-        // Regra: não permitir cancelamento de pedido aprovado
         if ($order->status === 'aprovado' && $requestStatus === 'cancelado') {
             return response()->json(['message' => 'Cannot cancel an approved order'], 400);
         }
@@ -80,10 +78,6 @@ class TravelOrderController extends Controller
         $order->status = $requestStatus;
         $order->save();
 
-        // Aqui você pode disparar notificação para o usuário
-        // $order->user->notify(new OrderStatusUpdated($order));
-
-        return response()->json($order);
+        return response()->json(new TravelOrderResource($order));
     }
-
 }
