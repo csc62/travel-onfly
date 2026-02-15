@@ -10,7 +10,6 @@ services:
     volumes:
       - .:/var/www
     working_dir: /var/www
-    user: "${UID}:${GID}"
     depends_on:
       - travel_mysql
     networks:
@@ -37,8 +36,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: laravel
       MYSQL_PASSWORD: secret
-    ports:
-      - "3306:3306"
     networks:
       - travel-network
 

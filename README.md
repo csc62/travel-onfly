@@ -78,14 +78,6 @@ Isso fará:
 
 > A API estará acessível em `http://localhost:8000/api/ping`.
 
-## ⚙️ Setup do Projeto
-
-Clone o repositório:
-
-```bash
-git clone https://github.com/csc62/travel-onfly
-cd travel-onfly
-```
 
 ## 🔑 Tokens de teste
 
